@@ -1,6 +1,9 @@
+
 import React, { Component } from 'react';
+
 import DiscoverBlock from './DiscoverBlock/components/DiscoverBlock';
 import '../styles/_discover.scss';
+import {fetchCategories,fetchFeatured,fetchNewReleases} from'../Api/index'
 
 export default class Discover extends Component {
   constructor() {
@@ -9,12 +12,27 @@ export default class Discover extends Component {
     this.state = {
       newReleases: [],
       playlists: [],
-      categories: []
+      categories: [],
+
     };
   }
 
+  componentDidMount= async()=>{
+    await this.requestData('categories',fetchCategories);
+    await this.requestData('newReleases',fetchNewReleases);
+    await this.requestData('playlists',fetchFeatured);
+  }
+
+  requestData  = async (key, reqFunction) => {
+    const data = await reqFunction();
+    this.setState({[key]:data});
+
+    // console.log(data)
+  };
+
   render() {
-    const { newReleases, playlists, categories } = this.state;
+    const { newReleases, playlists, categories} = this.state;
+
 
     return (
       <div className="discover">
